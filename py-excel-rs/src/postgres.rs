@@ -4,7 +4,7 @@ use excel_rs_postgres::{ExcelBytes, ExcelBytesBorrowed, FallibleIterator, Postgr
 use excel_rs_xlsx::WorkBook;
 use pyo3::{pyclass, pymethods, PyResult};
 
-#[pyclass]
+#[pyclass(unsendable)]
 pub struct PyPostgresClient {
     client: Option<PostgresClient>,
 }

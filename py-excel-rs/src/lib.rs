@@ -45,7 +45,7 @@ fn _excel_rs<'py>(m: &Bound<'py, PyModule>) -> PyResult<()> {
 
         let final_buffer = workbook.finish().ok().unwrap();
 
-        PyBytes::new_bound(py, &final_buffer.into_inner())
+        PyBytes::new(py, &final_buffer.into_inner())
     }
 
     #[pyfn(m)]
@@ -93,7 +93,7 @@ fn _excel_rs<'py>(m: &Bound<'py, PyModule>) -> PyResult<()> {
 
         let final_buffer = workbook.finish().ok().unwrap();
 
-        PyBytes::new_bound(py, &final_buffer.into_inner())
+        PyBytes::new(py, &final_buffer.into_inner())
     }
 
     #[pyfn(m)]
@@ -151,7 +151,7 @@ fn _excel_rs<'py>(m: &Bound<'py, PyModule>) -> PyResult<()> {
 
         let final_buffer = workbook.finish().ok().unwrap();
 
-        PyBytes::new_bound(py, &final_buffer.into_inner())
+        PyBytes::new(py, &final_buffer.into_inner())
     }
 
     m.add_class::<PyPostgresClient>()?;
