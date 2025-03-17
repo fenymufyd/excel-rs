@@ -12,7 +12,7 @@ description = "python ffi for excel-rs"
 excel-rs-xlsx = { workspace = true }
 excel-rs-csv = { workspace = true }
 excel-rs-postgres = { workspace = true }
-pyo3 = { version = "0.21", features = ["chrono", "extension-module"] }
+pyo3 = { version = "0.24", features = ["chrono", "extension-module"] }
 numpy = "0.21"
 chrono = "0.4.38"
 
