@@ -43,6 +43,8 @@ impl<'a, W: Write + Seek> Sheet<'a, W> {
 
     // TOOD: Use ShortVec over Vec for cell ID
     pub fn write_row(&mut self, data: Vec<&[u8]>) -> Result<()> {
+        self.current_row_num += 1;
+
         let mut final_vec = Vec::with_capacity(512 * data.len());
 
         // TODO: Proper Error Handling
