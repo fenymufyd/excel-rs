@@ -471,14 +471,14 @@ checksum = "877a4ace8713b0bcf2a4e7eec82529c029f1d0619886d18145fea96c3ffe5c0f"
 
 [[package]]
 name = "excel-rs-csv"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "csv",
 ]
 
 [[package]]
 name = "excel-rs-postgres"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "anyhow",
  "chrono",
@@ -494,7 +494,7 @@ dependencies = [
 
 [[package]]
 name = "excel-rs-xlsx"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "anyhow",
  "zip",
@@ -1063,7 +1063,7 @@ dependencies = [
 
 [[package]]
 name = "py-excel-rs"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "chrono",
  "excel-rs-csv",

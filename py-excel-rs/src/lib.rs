@@ -3,13 +3,16 @@ mod utils;
 
 use std::io::Cursor;
 
-use chrono::NaiveDateTime;
+use chrono::{DateTime, NaiveDateTime, FixedOffset};
 use excel_rs_csv::{bytes_to_csv, get_headers, get_next_record};
 use excel_rs_xlsx::WorkBook;
 use numpy::PyReadonlyArray2;
 use postgres::PyPostgresClient;
-use utils::chrono_to_xlsx_date;
-use pyo3::{prelude::*, types::{PyBytes, PyList}};
+use pyo3::{
+    prelude::*,
+    types::{PyBytes, PyList},
+};
+use utils::{chrono_naive_to_xlsx_date, chrono_tz_to_xlsx_date};
 
 #[pymodule]
 fn _excel_rs<'py>(m: &Bound<'py, PyModule>) -> PyResult<()> {
@@ -68,7 +71,9 @@ fn _excel_rs<'py>(m: &Bound<'py, PyModule>) -> PyResult<()> {
                     }
                 } else {
                     if let Ok(inner_date) = x.extract::<NaiveDateTime>(py) {
-                        format!("{}", inner_date.format("%Y-%m-%d %r"))
+                        format!("{}", inner_date.format("%Y-%m-%d %H:%M:%S"))
+                    } else if let Ok(inner_date) = x.extract::<DateTime<FixedOffset>>(py) {
+                        format!("{}", inner_date.to_rfc3339())
                     } else {
                         String::from("")
                     }
@@ -117,9 +122,11 @@ fn _excel_rs<'py>(m: &Bound<'py, PyModule>) -> PyResult<()> {
                     }
                 } else {
                     if let Ok(inner_date) = x.extract::<NaiveDateTime>(py) {
-                        format!("{}", chrono_to_xlsx_date(inner_date))
+                        format!("{}", chrono_naive_to_xlsx_date(inner_date))
+                    } else if let Ok(inner_date) = x.extract::<DateTime<FixedOffset>>(py) {
+                        format!("{}", chrono_tz_to_xlsx_date(inner_date))
                     } else {
-                        String::from("")
+                        String::new()
                     }
                 }
             }
