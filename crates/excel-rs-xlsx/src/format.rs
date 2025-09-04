@@ -27,7 +27,9 @@ impl<W: Write + Seek> XlsxFormatter<W> {
     // }
 
     pub fn finish(mut self, num_of_sheets: u16) -> Result<W> {
-        let options = SimpleFileOptions::default();
+        let options = SimpleFileOptions::default()
+            .compression_method(zip::CompressionMethod::Deflated)
+            .compression_level(Some(1));
         self.write_content_type(&options, num_of_sheets)?;
         self.write_rels(&options)?;
         self.write_doc_props(&options)?;

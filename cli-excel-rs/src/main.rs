@@ -32,7 +32,13 @@ fn main() {
 
             let output_buffer = vec![];
             let mut workbook = WorkBook::new(Cursor::new(output_buffer));
-            let mut worksheet = workbook.get_worksheet(String::from("Sheet 1"));
+            let worksheet = workbook.get_worksheet(String::from("Sheet 1"));
+
+            if let Err(e) = worksheet {
+                panic!("{e}");
+            }
+
+            let mut worksheet = worksheet.unwrap();
 
             let mut reader = bytes_to_csv(data.as_slice());
             let headers = get_headers(&mut reader);

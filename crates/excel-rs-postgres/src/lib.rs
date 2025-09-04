@@ -14,7 +14,7 @@ pub use sql_impl::{ExcelBytes, ExcelBytesBorrowed};
 pub fn postgres_to_xlsx<'a>(mut iter: RowIter<'a>) -> Result<Vec<u8>> {
     let output_buffer = vec![];
     let mut workbook = WorkBook::new(Cursor::new(output_buffer));
-    let mut worksheet = workbook.get_worksheet(String::from("Sheet 1"));
+    let mut worksheet = workbook.get_worksheet(String::from("Sheet 1"))?;
 
     let headers = iter.next().ok().unwrap().unwrap();
     let len = headers.len();

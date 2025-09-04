@@ -23,7 +23,13 @@ fn _excel_rs<'py>(m: &Bound<'py, PyModule>) -> PyResult<()> {
 
         let output_buffer = vec![];
         let mut workbook = WorkBook::new(Cursor::new(output_buffer));
-        let mut worksheet = workbook.get_worksheet(String::from("Sheet 1"));
+        let worksheet = workbook.get_worksheet(String::from("Sheet 1"));
+
+        if let Err(e) = worksheet {
+            panic!("{e}");
+        }
+
+        let mut worksheet = worksheet.unwrap();
 
         let mut reader = bytes_to_csv(x);
         let headers = get_headers(&mut reader);
@@ -83,7 +89,13 @@ fn _excel_rs<'py>(m: &Bound<'py, PyModule>) -> PyResult<()> {
 
         let output_buffer = vec![];
         let mut workbook = WorkBook::new(Cursor::new(output_buffer));
-        let mut worksheet = workbook.get_worksheet(String::from("Sheet 1"));
+        let worksheet = workbook.get_worksheet(String::from("Sheet 1"));
+
+        if let Err(e) = worksheet {
+            panic!("{e}");
+        }
+
+        let mut worksheet = worksheet.unwrap();
 
         for row in ndarray_str.rows() {
             let bytes = row.map(|x| x.as_bytes()).to_vec();
@@ -143,7 +155,13 @@ fn _excel_rs<'py>(m: &Bound<'py, PyModule>) -> PyResult<()> {
 
         let output_buffer = vec![];
         let mut workbook = WorkBook::new(Cursor::new(output_buffer));
-        let mut worksheet = workbook.get_typed_worksheet(String::from("Sheet 1"));
+        let worksheet = workbook.get_typed_worksheet(String::from("Sheet 1"));
+
+        if let Err(e) = worksheet {
+            panic!("{e}");
+        }
+
+        let mut worksheet = worksheet.unwrap();
 
         for row in ndarray_str.rows() {
             let bytes = row.map(|x| x.as_bytes()).to_vec();

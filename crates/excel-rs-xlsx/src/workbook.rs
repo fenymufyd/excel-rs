@@ -1,6 +1,6 @@
 use super::format::XlsxFormatter;
-use std::{io::Seek, io::Write};
 use anyhow::Result;
+use std::{io::Seek, io::Write};
 use zip::ZipWriter;
 
 use super::sheet::Sheet;
@@ -21,16 +21,16 @@ impl<W: Write + Seek> WorkBook<W> {
         }
     }
 
-    pub fn get_worksheet(&mut self, name: String) -> Sheet<W> {
+    pub fn get_worksheet(&'_ mut self, name: String) -> Result<Sheet<'_, W>> {
         self.num_of_sheets += 1;
         Sheet::new(name, self.num_of_sheets, &mut self.formatter.zip_writer)
     }
 
-    pub fn get_typed_worksheet(&mut self, name: String) -> TypedSheet<W> {
+    pub fn get_typed_worksheet(&'_ mut self, name: String) -> Result<TypedSheet<'_, W>> {
         self.num_of_sheets += 1;
         TypedSheet::new(name, self.num_of_sheets, &mut self.formatter.zip_writer)
     }
-    
+
     pub fn finish(self) -> Result<W> {
         let result = self.formatter.finish(self.num_of_sheets)?;
         Ok(result)

@@ -66,7 +66,7 @@ impl PyPostgresClient {
         Ok(cols)
     }
 
-    pub fn get_xlsx_from_query(&mut self, query: &str) -> PyResult<Cow<[u8]>> {
+    pub fn get_xlsx_from_query(&'_ mut self, query: &str) -> PyResult<Cow<'_, [u8]>> {
         let res = match &mut self.client {
             Some(client) => client.make_query(&query, vec![]),
             None => panic!("Client not set up"),
@@ -79,7 +79,13 @@ impl PyPostgresClient {
 
         let output_buffer = vec![];
         let mut workbook = WorkBook::new(Cursor::new(output_buffer));
-        let mut worksheet = workbook.get_worksheet(String::from("Sheet 1"));
+        let worksheet = workbook.get_worksheet(String::from("Sheet 1"));
+
+        if let Err(e) = worksheet {
+            panic!("{e}");
+        }
+
+        let mut worksheet = worksheet.unwrap();
 
         let headers = iter.next().ok().unwrap().unwrap();
         let len = headers.len();
