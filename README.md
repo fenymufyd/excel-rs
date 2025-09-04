@@ -101,10 +101,10 @@ Tests were conducted on an Macbook Pro M1 Max with 64GB of RAM
 
 ### Python 
 
-#### py-excel-rs (2.89s)
+#### py-excel-rs (2.76s)
 ```bash
 $ time python test-py-excel-rs.py
-python3 test-py-excel-rs.py  2.00s user 0.18s system 99% cpu 2.892 total
+python3 test-py-excel-rs.py  2.59s user 0.15s system 99% cpu 2.760 total
 ```
 
 #### openpyxl (97.38s)
@@ -139,10 +139,10 @@ python3 test-pyexcelerate.py  35.27s user 0.33s system 99% cpu 35.821 total
 
 ### Command Line Tools
 
-#### cli-excel-rs (2.756s)
+#### cli-excel-rs (2.438s)
 ```bash
 $ time ./cli-excel-rs csv --in organizations-1000000.csv --out results.xlsx
-./cli-excel-rs csv --in organizations-1000000.csv --out 2.69s user 0.07s system 99% cpu 2.756 total
+./cli-excel-rs csv --in organizations-1000000.csv --out 2.36s user 0.08s system 99% cpu 2.438 total
 ```
 
 #### [csv2xlsx](https://github.com/mentax/csv2xlsx?tab=readme-ov-file)  (33.74s)
