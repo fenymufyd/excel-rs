@@ -6,6 +6,12 @@ pub fn bytes_to_csv<V: Read>(bytes: V) -> Reader<V> {
     csv::ReaderBuilder::new().from_reader(bytes)
 }
 
+pub fn bytes_to_tsv<V: Read>(bytes: V) -> Reader<V> {
+    csv::ReaderBuilder::new()
+        .delimiter(b'\t')
+        .from_reader(bytes)
+}
+
 pub fn get_headers<V: Read>(reader: &mut Reader<V>) -> Option<&ByteRecord> {
     match reader.byte_headers() {
         Ok(record) => Some(record),

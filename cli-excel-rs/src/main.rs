@@ -1,7 +1,7 @@
 use std::{fs::File, io::{Cursor, Read, Write}};
 
 use clap::{arg, Command};
-use excel_rs_csv::{bytes_to_csv, get_headers, get_next_record};
+use excel_rs_csv::{bytes_to_csv, bytes_to_tsv, get_headers, get_next_record};
 use excel_rs_xlsx::WorkBook;
 
 fn cli() -> Command {
@@ -13,6 +13,12 @@ fn cli() -> Command {
             Command::new("csv")
                 .about("Convert a csv file to xlsx")
                 .arg(arg!(--in <FILE> "csv file to convert"))
+                .arg(arg!(--out <FILE> "xlsx output file name")),
+        )
+        .subcommand(
+            Command::new("tsv")
+                .about("Convert a tsv file to xlsx")
+                .arg(arg!(--in <FILE> "tsv file to convert"))
                 .arg(arg!(--out <FILE> "xlsx output file name")),
         )
 }
@@ -41,6 +47,53 @@ fn main() {
             let mut worksheet = worksheet.unwrap();
 
             let mut reader = bytes_to_csv(data.as_slice());
+            let headers = get_headers(&mut reader);
+
+            if headers.is_some() {
+                let headers_to_bytes = headers.unwrap().iter().to_owned().collect();
+                if let Err(e) = worksheet.write_row(headers_to_bytes) {
+                    panic!("{e}");
+                }
+            }
+
+            while let Some(record) = get_next_record(&mut reader) {
+                let row_data = record.iter().to_owned().collect();
+                if let Err(e) = worksheet.write_row(row_data) {
+                    panic!("{e}");
+                }
+            }
+
+            if let Err(e) = worksheet.close() {
+                panic!("{e}");
+            }
+
+            let final_buffer = workbook.finish().ok().unwrap().into_inner();
+
+            f = File::create(out).expect(&format!("unable to write to {out}"));
+            f.write(&final_buffer).expect(&format!("Failed to write to file {out}"));
+        }
+        Some(("tsv", sub_matches)) => {
+            let input = sub_matches.get_one::<String>("in").expect("required");
+            let out = sub_matches.get_one::<String>("out").expect("required");
+
+            println!("test");
+
+            let mut f = File::open(input).expect("input tsv file not found");
+            let mut data: Vec<u8> = Vec::new();
+
+            f.read_to_end(&mut data).expect(&format!("Unable to read file {input}"));
+
+            let output_buffer = vec![];
+            let mut workbook = WorkBook::new(Cursor::new(output_buffer));
+            let worksheet = workbook.get_worksheet(String::from("Sheet 1"));
+
+            if let Err(e) = worksheet {
+                panic!("{e}");
+            }
+
+            let mut worksheet = worksheet.unwrap();
+
+            let mut reader = bytes_to_tsv(data.as_slice());
             let headers = get_headers(&mut reader);
 
             if headers.is_some() {
